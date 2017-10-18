@@ -13,9 +13,9 @@ public final class Contract {
     public static final String PATH = "movie";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public class MovieEntry implements BaseColumns{
+    public static class MovieEntry implements BaseColumns{
 
-        public final Uri BASE_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY).buildUpon()
+        public static final Uri MOVIE_URI = Uri.parse(CONTENT_AUTHORITY).buildUpon()
                 .appendPath(PATH)
                 .build();
         public static final String MOVIE_TABLE_NAME = "movie";
