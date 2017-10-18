@@ -45,17 +45,21 @@ public final class DbContentProvider extends ContentProvider {
         SQLiteDatabase db = sDbHelper.getReadableDatabase();
         Cursor cursor = null;
 
-        switch (mUriMatcher.match(uri)) {
-            case TABLE_CODE:
-                cursor = db.query(Contract.MovieEntry.MOVIE_TABLE_NAME, strings, s, strings1, null, null, s1);
-                break;
-            case ITEM_CODE:
-                cursor = db.query(Contract.MovieEntry.MOVIE_TABLE_NAME, strings, s + "=?", strings1, null, null, s1);
-                break;
-        }
+        try {
+            switch (mUriMatcher.match(uri)) {
+                case TABLE_CODE:
+                    cursor = db.query(Contract.MovieEntry.MOVIE_TABLE_NAME, strings, s, strings1, null, null, s1);
+                    break;
+                case ITEM_CODE:
+                    cursor = db.query(Contract.MovieEntry.MOVIE_TABLE_NAME, strings, s + "=?", strings1, null, null, s1);
+                    break;
+            }
 
-        if (cursor == null) {
-            Log.e(LOG_TAG, "Error querying DB: ");
+            if (cursor == null) {
+                Log.e(LOG_TAG, "Error querying DB: Cursor null");
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error querying DB: Try/Catch error");
         }
         return cursor;
     }
@@ -69,14 +73,14 @@ public final class DbContentProvider extends ContentProvider {
             db.beginTransaction();
             for (ContentValues cv : values) {
                 check = db.insert(Contract.MovieEntry.MOVIE_TABLE_NAME, null, cv);
-                if(check < 1){
-                    Log.e(LOG_TAG, "Bulk insert error");
+                if (check < 1) {
+                    Log.e(LOG_TAG, "Bulk insert error: insert fail");
                     break;
                 }
             }
             db.setTransactionSuccessful();
-        } catch (Exception e){
-            Log.e(LOG_TAG, "Bulk insert error 2: " + e);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Bulk insert error: Try/Catch error" + e);
         } finally {
             db.endTransaction();
         }
@@ -102,6 +106,19 @@ public final class DbContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        SQLiteDatabase db = sDbHelper.getWritableDatabase();
+        int count = 0;
+        String[] movieId = {uri.getLastPathSegment()};
+
+        try{
+            count = db.update(Contract.MovieEntry.MOVIE_TABLE_NAME, contentValues, s + "=?",movieId);
+            if (count < 1) {
+                Log.e(LOG_TAG, "Update error: update fail");
+            }
+        } catch (Exception e){
+            Log.e(LOG_TAG, "Update error: Try/Catch error");
+        }
+
+        return count;
     }
 }
