@@ -38,7 +38,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(sContext).inflate(R.layout.movie_item_layout, parent, false);
-
+        view.getLayoutParams().height = sItemHeight;
+        view.getLayoutParams().width = sItemWidth;
         return new ViewHolder(view);
     }
 
@@ -48,7 +49,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         String poster_path_id = sCursor.getString(sCursor.getColumnIndex(Contract.MovieEntry.MOVIE_POSTER));
         String full_poster_path = sContext.getResources().getString(R.string.image_base_url) + poster_path_id;
-        Log.i("Adapter", "Poster Path: " + poster_path_id);
+        Log.i("Adapter", "w /h" + sItemWidth + " / " + sItemHeight);
         Picasso.with(sContext)
                 .load(full_poster_path)
                 .resize(sItemWidth, sItemHeight)

@@ -87,6 +87,7 @@ public class MainFragment extends Fragment implements
         rv.setLayoutManager(layoutManager);
         mMovieAdapter = new MovieAdapter(getContext());
         rv.setAdapter(mMovieAdapter);
+        rv.setHasFixedSize(true);
 
         setupSharedPreferenced();
 
@@ -108,6 +109,7 @@ public class MainFragment extends Fragment implements
     private void setupSharedPreferenced() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.registerOnSharedPreferenceChangeListener(this);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -169,8 +171,15 @@ public class MainFragment extends Fragment implements
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SyncUtils.sendDataRequest(getContext());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayData();
+            }
+        },1000);
+        Log.w(LOG_TAG, "SP changed: " + key);
     }
 
     /**

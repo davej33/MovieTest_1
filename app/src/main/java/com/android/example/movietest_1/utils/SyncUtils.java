@@ -46,7 +46,7 @@ public final class SyncUtils {
             public void run() {
                 cursor = context.getContentResolver().query(Contract.MovieEntry.MOVIE_URI, new String[]{Contract.MovieEntry._ID}, null, null, null);
                 if (cursor == null || cursor.getCount() < 1) {
-                    initializeDb(context);
+                    sendDataRequest(context);
                 } else {
                     cursor.close();
                 }
@@ -56,7 +56,7 @@ public final class SyncUtils {
         return false;
     }
 
-    private static void initializeDb(final Context context) {
+    public static void sendDataRequest(final Context context) {
         String url = NetworkUtils.buildURL(context);
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override

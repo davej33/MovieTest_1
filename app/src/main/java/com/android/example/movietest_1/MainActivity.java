@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         setContentView(R.layout.activity_main);
 
         ActionBar bar = getSupportActionBar();
-        if(bar != null) bar.setDisplayHomeAsUpEnabled(true);
+        if(bar != null) bar.setDisplayHomeAsUpEnabled(false);
+        
         getSupportFragmentManager().beginTransaction().add(R.id.mainFragContainer, MainFragment.newInstance()).commit();
 
         setPosterSize();
