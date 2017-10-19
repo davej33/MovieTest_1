@@ -24,6 +24,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 Contract.MovieEntry.MOVIE_TITLE + " TEXT NOT NULL, " +
                 Contract.MovieEntry.MOVIE_DATE + " TEXT NOT NULL, " +
                 Contract.MovieEntry.MOVIE_POSTER+ " TEXT NOT NULL, " +
+                Contract.MovieEntry.MOVIE_POPULARITY + " INTEGER NOT NULL, " +
                 Contract.MovieEntry.MOVIE_RATING + " INTEGER NOT NULL, " +
                 Contract.MovieEntry.MOVIE_SOURCE_ID + " INTEGER NOT NULL, " +
                 " UNIQUE (" + Contract.MovieEntry.MOVIE_SOURCE_ID + ") ON CONFLICT REPLACE);";

@@ -73,10 +73,12 @@ public final class DbContentProvider extends ContentProvider {
             db.beginTransaction();
             for (ContentValues cv : values) {
                 check = db.insert(Contract.MovieEntry.MOVIE_TABLE_NAME, null, cv);
+                Log.i(LOG_TAG, "Bulk insert check: " + check);
                 if (check < 1) {
                     Log.e(LOG_TAG, "Bulk insert error: insert fail");
                     break;
                 }
+                count++;
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {

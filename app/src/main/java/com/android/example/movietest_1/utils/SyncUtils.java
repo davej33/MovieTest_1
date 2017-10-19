@@ -46,7 +46,7 @@ public final class SyncUtils {
             public void run() {
                 cursor = context.getContentResolver().query(Contract.MovieEntry.MOVIE_URI, new String[]{Contract.MovieEntry._ID}, null, null, null);
                 if (cursor == null || cursor.getCount() < 1) {
-                    initializedDb(context);
+                    initializeDb(context);
                 }
 //                cursor.close();
             }
@@ -55,7 +55,7 @@ public final class SyncUtils {
         return false;
     }
 
-    private static void initializedDb(final Context context) {
+    private static void initializeDb(final Context context) {
         String url = NetworkUtils.buildURL(context);
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
@@ -63,7 +63,7 @@ public final class SyncUtils {
                 ContentValues[] values;
                 try {
                     values = JsonUtils.parseData(response);
-                    Log.e(LOG_TAG, "Response: " + response);
+                    Log.i(LOG_TAG, "Response: " + values.length);
                     insertIntoDb(values, context);
 
                 } catch (Exception e) {
@@ -83,7 +83,7 @@ public final class SyncUtils {
         int check = -1;
         try{
             check = context.getContentResolver().bulkInsert(Contract.MovieEntry.MOVIE_URI,values);
-            Log.e(LOG_TAG, "Init bulk insert check: " + check);
+            Log.i(LOG_TAG, "Init bulk insert check: " + check);
         } catch (Exception e){
             Log.e(LOG_TAG, "Init bulk insert error: " + e);
         }
