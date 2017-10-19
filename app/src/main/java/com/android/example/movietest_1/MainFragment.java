@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.example.movietest_1.data.Contract;
 import com.android.example.movietest_1.utils.SyncUtils;
 
 
@@ -31,7 +33,7 @@ import com.android.example.movietest_1.utils.SyncUtils;
  */
 public class MainFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        SharedPreferences.OnSharedPreferenceChangeListener{
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = MainFragment.class.getSimpleName();
     private static final int PORTRAITS_ROWS = 2;
@@ -88,7 +90,15 @@ public class MainFragment extends Fragment implements
 
         setupSharedPreferenced();
 
-        if(SyncUtils.initialized(getContext())){
+        if (SyncUtils.initialized(getContext())) {
+            displayData();
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayData();
+                }
+            }, 1000);
 
         }
         // Inflate the layout for this fragment
@@ -118,11 +128,11 @@ public class MainFragment extends Fragment implements
         }
     }
 
-    private void DisplayData(){
-        if(mMovieAdapter.getItemCount() == 0 || mMovieAdapter == null){
-            getLoaderManager().initLoader(1,null,this);
+    private void displayData() {
+        if (mMovieAdapter.getItemCount() == 0 || mMovieAdapter == null) {
+            getLoaderManager().initLoader(1, null, this);
         } else {
-            getLoaderManager().restartLoader(1,null,this);
+            getLoaderManager().restartLoader(1, null, this);
         }
     }
 
@@ -134,7 +144,18 @@ public class MainFragment extends Fragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String sort = pref.getString(getContext().getResources().getString(R.string.pref_sort_key),
+                getContext().getResources().getString(R.string.pref_sort_default));
+        return new CursorLoader(getContext(), Contract.MovieEntry.MOVIE_URI, null, null, null, getSortColumn(sort, getContext()));
+    }
+
+    private String getSortColumn(String sort, Context context) {
+        if(sort.equals(context.getResources().getString(R.string.pref_sort_popularity_value))){
+            return Contract.MovieEntry.MOVIE_POPULARITY + " DESC";
+        } else {
+            return Contract.MovieEntry.MOVIE_RATING + " DESC";
+        }
     }
 
     @Override
@@ -142,6 +163,7 @@ public class MainFragment extends Fragment implements
         if (data == null) {
             Log.e(LOG_TAG, "Null cursor");
         } else {
+            Log.e(LOG_TAG, "Cursor count: " + data.getCount());
             data.moveToFirst();
             mMovieAdapter.swapCursor(data);
         }

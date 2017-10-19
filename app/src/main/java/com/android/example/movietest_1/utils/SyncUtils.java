@@ -47,8 +47,9 @@ public final class SyncUtils {
                 cursor = context.getContentResolver().query(Contract.MovieEntry.MOVIE_URI, new String[]{Contract.MovieEntry._ID}, null, null, null);
                 if (cursor == null || cursor.getCount() < 1) {
                     initializeDb(context);
+                } else {
+                    cursor.close();
                 }
-//                cursor.close();
             }
         });
         check.run();
@@ -81,15 +82,15 @@ public final class SyncUtils {
 
     private static void insertIntoDb(ContentValues[] values, Context context) {
         int check = -1;
-        try{
-            check = context.getContentResolver().bulkInsert(Contract.MovieEntry.MOVIE_URI,values);
+        try {
+            check = context.getContentResolver().bulkInsert(Contract.MovieEntry.MOVIE_URI, values);
             Log.i(LOG_TAG, "Init bulk insert check: " + check);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(LOG_TAG, "Init bulk insert error: " + e);
         }
     }
 
-    private static void checkVolleyError(VolleyError error, Context context){
+    private static void checkVolleyError(VolleyError error, Context context) {
         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
             Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
         } else if (error instanceof AuthFailureError) {
