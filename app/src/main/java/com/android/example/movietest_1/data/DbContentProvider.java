@@ -110,10 +110,10 @@ public final class DbContentProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase db = sDbHelper.getWritableDatabase();
         int count = 0;
-        String[] movieId = {uri.getLastPathSegment()};
+//        String[] movieId = {uri.getLastPathSegment()};
 
         try{
-            count = db.update(Contract.MovieEntry.MOVIE_TABLE_NAME, contentValues, s + "=?",movieId);
+            count = db.update(Contract.MovieEntry.MOVIE_TABLE_NAME, contentValues, s , strings);
             if (count < 1) {
                 Log.e(LOG_TAG, "Update error: update fail");
             }

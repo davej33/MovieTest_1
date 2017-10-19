@@ -26,5 +26,6 @@ public final class Contract {
         public static final String MOVIE_RATING = "rating";
         public static final String MOVIE_POPULARITY = "popularity";
         public static final String MOVIE_SOURCE_ID = "source_id";
+        public static final String MOVIE_FAVORITES = "favorites";
     }
 }

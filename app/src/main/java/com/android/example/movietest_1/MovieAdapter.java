@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.android.example.movietest_1.data.Contract;
+import com.android.example.movietest_1.utils.FavoriteUtils;
+import com.android.example.movietest_1.utils.SyncUtils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -44,17 +47,33 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         sCursor.moveToPosition(position);
 
         String poster_path_id = sCursor.getString(sCursor.getColumnIndex(Contract.MovieEntry.MOVIE_POSTER));
         String full_poster_path = sContext.getResources().getString(R.string.image_base_url) + poster_path_id;
-        Log.i("Adapter", "w /h" + sItemWidth + " / " + sItemHeight);
         Picasso.with(sContext)
                 .load(full_poster_path)
                 .resize(sItemWidth, sItemHeight)
                 .centerCrop()
                 .into((ImageView) holder.itemView.findViewById(R.id.poster_image_container));
+
+        holder.favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.favButton.isChecked()){
+                    sCursor.moveToPosition(holder.getAdapterPosition());
+                    FavoriteUtils.addFavorites(sCursor.getString(sCursor.getColumnIndex(Contract.MovieEntry.MOVIE_TITLE)), sContext);
+                } else {
+                    try {
+                        FavoriteUtils.removeFavorites(sCursor.getString(sCursor.getColumnIndex(Contract.MovieEntry.MOVIE_TITLE)), sContext);
+                    } catch (Exception e) {
+                        Log.e("Adapter","FavRemove Error: " + e);
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -75,11 +94,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView view;
+        ToggleButton favButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             view = itemView.findViewById(R.id.poster_image_container);
+            favButton = itemView.findViewById(R.id.fav_button);
         }
     }
 }

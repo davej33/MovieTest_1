@@ -35,7 +35,7 @@ public final class JsonUtils {
             String date = element.getString(DATE);
             int popularity = element.getInt(POPULARITY);
             double rating = element.getDouble(RATING);
-            int id = element.getInt(TMDB_ID);
+            String id = element.getString(TMDB_ID);
             String poster_path = element.getString(POSTER_PATH);
             Log.i("JsonUtils", "Poster Path: " + poster_path);
 

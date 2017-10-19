@@ -26,7 +26,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 Contract.MovieEntry.MOVIE_POSTER+ " TEXT NOT NULL, " +
                 Contract.MovieEntry.MOVIE_POPULARITY + " INTEGER NOT NULL, " +
                 Contract.MovieEntry.MOVIE_RATING + " INTEGER NOT NULL, " +
-                Contract.MovieEntry.MOVIE_SOURCE_ID + " INTEGER NOT NULL, " +
+                Contract.MovieEntry.MOVIE_SOURCE_ID + " TEXT NOT NULL, " +
+                Contract.MovieEntry.MOVIE_FAVORITES + " TEXT NOT NULL DEFAULT 0, " +
                 " UNIQUE (" + Contract.MovieEntry.MOVIE_SOURCE_ID + ") ON CONFLICT REPLACE);";
 
         db.execSQL(createDb);
