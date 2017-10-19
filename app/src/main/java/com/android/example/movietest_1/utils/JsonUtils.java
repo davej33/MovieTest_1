@@ -1,6 +1,7 @@
 package com.android.example.movietest_1.utils;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.android.example.movietest_1.data.Contract;
 
@@ -36,6 +37,7 @@ public final class JsonUtils {
             double rating = element.getDouble(RATING);
             int id = element.getInt(TMDB_ID);
             String poster_path = element.getString(POSTER_PATH);
+            Log.i("JsonUtils", "Poster Path: " + poster_path);
 
             ContentValues cv = new ContentValues();
             cv.put(Contract.MovieEntry.MOVIE_TITLE,title);

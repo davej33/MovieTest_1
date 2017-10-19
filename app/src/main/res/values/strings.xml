@@ -8,6 +8,7 @@
     <string name="api_code_key">api_key</string>
     <string name="query_base_url">https://api.themoviedb.org/3/movie/</string>
     <string name="trailer_base_url">https://api.themoviedb.org/3/movie/</string>
+    <string name="image_base_url">http://image.tmdb.org/t/p/w185</string>
 
     <!-- Strings related to Settings -->
 

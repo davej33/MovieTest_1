@@ -150,20 +150,14 @@ public class MainFragment extends Fragment implements
         return new CursorLoader(getContext(), Contract.MovieEntry.MOVIE_URI, null, null, null, getSortColumn(sort, getContext()));
     }
 
-    private String getSortColumn(String sort, Context context) {
-        if(sort.equals(context.getResources().getString(R.string.pref_sort_popularity_value))){
-            return Contract.MovieEntry.MOVIE_POPULARITY + " DESC";
-        } else {
-            return Contract.MovieEntry.MOVIE_RATING + " DESC";
-        }
-    }
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data == null) {
             Log.e(LOG_TAG, "Null cursor");
         } else {
-            Log.e(LOG_TAG, "Cursor count: " + data.getCount());
+            Log.i(LOG_TAG, "Cursor count: " + data.getCount());
             data.moveToFirst();
             mMovieAdapter.swapCursor(data);
         }
@@ -192,5 +186,12 @@ public class MainFragment extends Fragment implements
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private String getSortColumn(String sort, Context context) {
+        if(sort.equals(context.getResources().getString(R.string.pref_sort_popularity_value))){
+            return Contract.MovieEntry.MOVIE_POPULARITY + " DESC";
+        } else {
+            return Contract.MovieEntry.MOVIE_RATING + " DESC";
+        }
     }
 }
